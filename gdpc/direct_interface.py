@@ -13,7 +13,7 @@ from requests.exceptions import ConnectionError
 
 def getBlock(x, y, z):
     """**Return the block ID from the world**."""
-    url = f'http://localhost:9000/blocks?x={x}&y={y}&z={z}'
+    url = f'http://172.28.176.1:9000/blocks?x={x}&y={y}&z={z}'
     try:
         response = requests.get(url).text
     except ConnectionError:
@@ -28,7 +28,7 @@ def placeBlock(x, y, z, blockStr, doBlockUpdates=True, customFlags=None):
     else:
         blockUpdateQueryParam = f"doBlockUpdates={doBlockUpdates}"
 
-    url = (f'http://localhost:9000/blocks?x={x}&y={y}&z={z}'
+    url = (f'http://172.28.176.1:9000/blocks?x={x}&y={y}&z={z}'
            f'&{blockUpdateQueryParam}')
     try:
         response = requests.put(url, blockStr)
@@ -53,7 +53,7 @@ def sendBlocks(blockList, x=0, y=0, z=0, retries=5,
 
 def runCommand(command):
     """**Run a Minecraft command in the world**."""
-    url = 'http://localhost:9000/command'
+    url = 'http://172.28.176.1:9000/command'
     try:
         response = requests.post(url, bytes(command, "utf-8"))
     except ConnectionError:
@@ -64,7 +64,7 @@ def runCommand(command):
 def requestBuildArea():
     """**Return the building area**."""
     area = 0, 0, 0, 128, 256, 128   # default area for beginners
-    response = requests.get('http://localhost:9000/buildarea')
+    response = requests.get('http://172.28.176.1:9000/buildarea')
     if response.ok:
         buildArea = response.json()
         if buildArea != -1:
@@ -83,7 +83,7 @@ def requestBuildArea():
 
 def getChunks(x, z, dx, dz, rtype='text'):
     """**Get raw chunk data**."""
-    url = f'http://localhost:9000/chunks?x={x}&z={z}&dx={dx}&dz={dz}'
+    url = f'http://172.28.176.1:9000/chunks?x={x}&z={z}&dx={dx}&dz={dz}'
     acceptType = 'application/octet-stream' if rtype == 'bytes' else 'text/raw'
     response = requests.get(url, headers={"Accept": acceptType})
     if response.status_code >= 400:
